@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-9">
+      <div class="row loco-gallery">
+        <div class="col-md-2 col-xs-4" ng-repeat="loco in locos">
+          <div class="pull-right">
+            <button type="button" class="close" ng-click="_.remove(locos,loco)" aria-hidden="true">&times;</button>
+          </div>
+          <div class="thumbnail" ng-click="selectLoco(loco)" ng-class="{'active': currentLoco === loco}">
+            <span class="number-circle">{{$index + 1}}</span>
+            <img ng-src="{{loco.imgUrl}}" alt="Locomotive {{loco.name}}" >
+          </div>
+        </div>
+        <div class="col-md-2 col-xs-4">
+          <div class="thumbnail" ng-click="addLoco()">
+            <button class="btn btn-success"><i class="fa fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="row current-loco">
+        <div class="col-md-12">
+          <img ng-src="{{currentLoco.imgUrl}}" alt="Current Locomotive" class="thumbnail">
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 throttle thumbnail">
+      <div class="pull-right">
+      </div>
+      <div class="current-speed h2" ng-class="{'on': track.powerState.mainTrackPower}">{{track.powerState.mainTrackPower? (currentLoco.speed || 0): '0FF' }}</div>
+      <div class="knob-surround" ng-class="{'on': track.powerState.mainTrackPower}">
+        <div id="control"></div>
+      </div>
+      <div class="direction-slider">
+        <div class="btn btn-stop" ng-click="updateSpeed(0)">
+        </div>
+        <nz-toggle
+          width="175"
+          height="40"
+          ng-model="currentLoco.forward">
+        </nz-toggle>
+        <div>DIRECTION</div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<div class="modal-header">
+  <button ng-if="modal.dismissable" type="button" ng-click="$dismiss()" class="close">&times;</button>
+  <h4 ng-if="modal.title" ng-bind="modal.title" class="modal-title"></h4>
+</div>
+<div class="modal-body">
+  <div class="add-loco-modal">
+    <form>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" class="form-control" placeholder="Name" ng-model="newLoco.name">
+      </div>
+      <div class="form-group">
+        <label for="number">ID (lower number)</label>
+        <input type="number" class="form-control" id="number" placeholder="Number" ng-model="newLoco.id">
+      </div>
+      <div class="form-group">
+        <label for="maxSpeed">Max. Speed</label>
+        <input type="number" class="form-control" id="maxSpeed" placeholder="Number" ng-model="newLoco.maxSpeed">
+      </div>
+      <div class="form-group">
+        <label for="image">Image</label>
+        <input type="file" id="image">
+        <p class="help-block">Example block-level help text here.</p>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="modal-footer">
+  <button ng-repeat="button in modal.buttons" ng-class="button.classes" ng-click="button.click(newLoco)" ng-bind="button.text" class="btn"></button>
+</div>
+

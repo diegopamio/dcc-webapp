@@ -1,0 +1,95 @@
+$icon-font-path: '/assets/fonts/bootstrap/';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap';
+@import '~bootstrap-social/bootstrap-social.scss';
+$fa-font-path: '/assets/fonts/font-awesome/';
+@import '~font-awesome/scss/font-awesome';
+
+// @import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,900|Roboto:300,500,700,900);
+
+/**
+ * App-wide Styles
+ */
+
+@mixin gradient($direction, $color-stops...) {
+  background: nth(nth($color-stops, 1), 1);
+  background: -webkit-linear-gradient(legacy-direction($direction), $color-stops);
+  background: linear-gradient($direction, $color-stops);
+}
+
+@mixin transform($transforms) {
+  -moz-transform: $transforms;
+  -o-transform: $transforms;
+  -ms-transform: $transforms;
+  -webkit-transform: $transforms;
+  transform: $transforms;
+}
+@font-face {
+  font-family: 'lseg7';
+  //src: url('lcd.eot'); /* IE9 Compat Modes */
+  //src: url('lcd.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  //url('lcd.woff2') format('woff2'), /* Super Modern Browsers */
+  src: url('/assets/fonts/dseg7/DSEG7Classic-Regular.woff') format('woff'), /* Pretty Modern Browsers */
+  url('/assets/fonts/dseg7/DSEG7Classic-Regular.ttf')  format('truetype') /* Safari, Android, iOS */
+}
+
+.browserupgrade {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+// Component styles are injected through gulp
+/* inject:scss */
+@import 'admin/admin';
+@import 'main/main';
+@import '../components/footer/footer';
+@import '../components/modal/modal';
+@import '../components/oauth-buttons/oauth-buttons';
+@import "../components/navbar/navbar";
+/* endinject */
+
+// colours
+$knob-colour: #181818;
+$light-colour: #a8d8f8;
+
+[ng-click] {
+  cursor: pointer;
+}
+
+.power-button, .direction-slider {
+  .nz-toggle-wrap.horizontal .nz-toggle-handle {
+    @include gradient(rgba(254, 255, 255, 1) 0%, rgba(237, 237, 237, 1) 29%, rgba(255, 255, 255, 1) 50%, rgba(229, 229, 229, 1) 54%, rgba(255, 255, 255, 1) 70%);
+  }
+  .nz-toggle-wrap.horizontal.false .nz-toggle-handle {
+    border: 2px solid #ececec;
+    @include box-shadow(4px 2px 10px 3px #cacaca inset, -1px -1px 1px 0px #333 inset, 2px 1px 9px #642423);
+  }
+  .nz-toggle-wrap.horizontal.true .nz-toggle-handle {
+    border: 2px solid #ececec;
+    @include box-shadow(4px 2px 10px 3px #cacaca inset, -1px -1px 1px 0px #333 inset, -2px 1px 9px #21643d);
+  }
+  .nz-toggle-wrap.false {
+    @include box-shadow(4px 3px 4px 2px hsla(2,85%,30%,1) inset);
+  }
+  .nz-toggle-wrap.true {
+    @include box-shadow(4px 3px 4px 2px hsl(126, 79%, 30%) inset);
+  }
+}
+.direction-slider {
+  .nz-toggle-wrap.horizontal.true .nz-toggle-handle:before {
+    content: "\f061";
+    font-family: 'FontAwesome';
+    font-size: 21px;
+    color: #60bd68;
+    text-shadow: 1px 1px 2px black;
+  }
+  .nz-toggle-wrap.horizontal.false .nz-toggle-handle:before {
+    content: "\f060";
+    font-family: 'FontAwesome';
+    font-size: 21px;
+    margin-left: -3px;
+    color: #f15854;
+    text-shadow: 1px 1px 2px black;
+  }
+}
