@@ -20,7 +20,7 @@ import _ from 'lodash';
           case 'update':
             var knob = el.find('.knob');
             var knobTop = knob.find('.top');
-            knobTop.css('transition','all 350ms ease-in');
+            knobTop.css('transition','all ' + (Math.abs(rotation - value) * 1000) + 'ms ease-in');
             knobTop.css('transform','rotate('+(value * max)+'deg)');
             setTimeout(function () {
               knobTop.css('transition','all 0ms');

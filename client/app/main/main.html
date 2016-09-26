@@ -1,42 +1,84 @@
 <div class="container">
   <div class="row">
-    <div class="col-md-9">
-      <div class="row loco-gallery">
-        <div class="col-md-2 col-xs-4" ng-repeat="loco in locos">
-          <div class="pull-right">
-            <button type="button" class="close" ng-click="_.remove(locos,loco)" aria-hidden="true">&times;</button>
-          </div>
+    <div class="col-md-9 col-sm-12">
+      <div class="row loco-gallery" ui-sortable="" ng-model="locos">
+        <div class="col-sm-2 col-xs-4" ng-repeat="loco in locos track by $index">
           <div class="thumbnail" ng-click="selectLoco(loco)" ng-class="{'active': currentLoco === loco}">
-            <span class="number-circle">{{$index + 1}}</span>
-            <img ng-src="{{loco.imgUrl}}" alt="Locomotive {{loco.name}}" >
+            <div class="pull-right">
+              <button type="button" class="close" ng-click="_.remove(locos,loco)" aria-hidden="true">&times;</button>
+            </div>
+            <div class="pull-left">
+              <button type="button" class="edit close" ng-click="addOrEditLoco(loco)"><i class="fa fa-pencil"></i></button>
+            </div>
+            <span class="number-circle" ng-class="{'disabled': !track.powerState.mainTrackPower, 'red': loco.getSpeed() && loco.isGoingForward() === false, 'green': loco.getSpeed() && loco.isGoingForward() === true, 'gray': loco.isStopped()}">{{$index + 1}}</span>
+            <img ng-src="{{loco.getImage()}}" alt="Locomotive {{loco.name}}" >
+            <div class="progress" >
+              <div
+                class="progress-bar"
+                ng-class="{
+                  'disabled': loco.isStopped() || !track.powerState.mainTrackPower,
+                  'progress-bar-success': loco.isGoingForward() === true,
+                  'progress-bar-danger':  loco.isGoingForward() === false}"
+                style="width: {{(loco.getSpeed() / loco.maxSpeed) * 100}}%;"
+                role="progressbar"
+                aria-valuenow="{{loco.getSpeed()}}"
+                aria-valuemin="0"
+                aria-valuemax="loco.maxSpeed"
+                style="min-width: 1em;">
+              </div>
+            </div>
           </div>
         </div>
-        <div class="col-md-2 col-xs-4">
-          <div class="thumbnail" ng-click="addLoco()">
+        <div class="col-sm-2 col-xs-4">
+          <div class="thumbnail" ng-click="addOrEditLoco()">
             <button class="btn btn-success"><i class="fa fa-plus"></i></button>
           </div>
         </div>
       </div>
       <div class="row current-loco">
+        <h1 class="col-md-12">{{currentLoco.getName()}}</h1>
         <div class="col-md-12">
-          <img ng-src="{{currentLoco.imgUrl}}" alt="Current Locomotive" class="thumbnail">
+          <div
+            ng-mousedown="funcInstance.press()"
+            ng-class="{'active-function': funcInstance.isActive()}"
+            ng-mouseup="funcInstance.release()"
+            class="btn btn-default function"
+            data-do-not-duplicate="true"
+            data-drag="true"
+            jqyoui-draggable="{index: {{$index}}, animate: true}"
+            data-jqyoui-options="{revert: 'invalid'}"
+            ng-repeat="funcInstance in currentLoco.getFunctionInstances()"
+            style="position:absolute; top: {{funcInstance.getPosition().y * imgHeight}}px; left: {{funcInstance.getPosition().x}}%"
+            uib-tooltip="{{funcInstance.getName()}}">
+            <img class="function-icon" ng-src="/assets/images/functions/{{funcInstance.getType()}}.png">
+          </div>
+
+          <img data-drop="true" jqyoui-droppable="{multiple:true, onDrop: 'onFunctionDrop'}" ng-src="{{currentLoco.getImage()}}" alt="Current Locomotive" class="thumbnail no-bottom-margin" id="locoImage">
+
+          <div class="col-md-12 drawer" style="display: none">
+            <div>Drag the functions to the locomotive image and then configure it with the drop-down menu.</div>
+            <div data-func="{{func}}" ng-repeat="func in currentLoco.getAvailableFunctions()" class="btn btn-default function" data-drag="true" jqyoui-draggable="{index: {{$index}}, animate: true}" data-jqyoui-options="{revert: 'invalid', helper: 'clone', appendTo: 'body'}" uib-tooltip="{{func.name}}"><img class="function-icon" ng-src="/assets/images/functions/{{func.type}}.png"></div>
+          </div>
+          <button class="drawer-handler" ng-click="toggleFunctionsDrawer()">Functions Drawer</button>
         </div>
+        <br/>
       </div>
     </div>
     <div class="col-md-3 throttle thumbnail">
       <div class="pull-right">
       </div>
-      <div class="current-speed h2" ng-class="{'on': track.powerState.mainTrackPower}">{{track.powerState.mainTrackPower? (currentLoco.speed || 0): '0FF' }}</div>
+      <div class="current-speed h2" ng-class="{'on': track.powerState.mainTrackPower}">{{track.powerState.mainTrackPower? (currentLoco.getSpeed()): '0FF' }}</div>
       <div class="knob-surround" ng-class="{'on': track.powerState.mainTrackPower}">
         <div id="control"></div>
       </div>
       <div class="direction-slider">
-        <div class="btn btn-stop" ng-click="updateSpeed(0)">
+        <div class="btn btn-stop" ng-click="currentLoco.stop()">
         </div>
         <nz-toggle
-          width="175"
+          width="160"
           height="40"
-          ng-model="currentLoco.forward">
+          on-toggle="updateDirection()"
+          ng-model="currentLocoDirection">
         </nz-toggle>
         <div>DIRECTION</div>
       </div>

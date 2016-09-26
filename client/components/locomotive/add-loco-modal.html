@@ -1,31 +1,50 @@
+<!--ToDo: Add form validation-->
 <div class="modal-header">
   <button ng-if="modal.dismissable" type="button" ng-click="$dismiss()" class="close">&times;</button>
   <h4 ng-if="modal.title" ng-bind="modal.title" class="modal-title"></h4>
 </div>
 <div class="modal-body">
-  <div class="add-loco-modal">
+  <div class="add-loco-modal row">
     <form>
-      <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" id="name" class="form-control" placeholder="Name" ng-model="newLoco.name">
-      </div>
-      <div class="form-group">
+      <div class="form-group col-md-4">
         <label for="number">ID (lower number)</label>
-        <input type="number" class="form-control" id="number" placeholder="Number" ng-model="newLoco.id">
+        <input type="number" class="form-control" id="number" placeholder="Number" ng-model="loco.number">
       </div>
-      <div class="form-group">
+      <div class="form-group col-md-8">
+        <label for="name">Name</label>
+        <input type="text" id="name" class="form-control" placeholder="Name" ng-model="loco.name">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="type">Type</label>
+        <select id="type" class="form-control" ng-model="loco.type">
+          <option value="diesel">Diesel</option>
+          <option value="electric">Electric</option>
+          <option value="steam">Steam</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-group col-md-4">
         <label for="maxSpeed">Max. Speed</label>
-        <input type="number" class="form-control" id="maxSpeed" placeholder="Number" ng-model="newLoco.maxSpeed">
+        <input type="number" class="form-control" id="maxSpeed" placeholder="in Km/h" ng-model="loco.maxSpeed">
       </div>
-      <div class="form-group">
-        <label for="image">Image</label>
-        <input type="file" id="image">
-        <p class="help-block">Example block-level help text here.</p>
+      <div class="form-group col-md-12">
+        <label for="imageFile">Image</label>
+        <input type="file" id="imageFile">
+        <!--<p class="help-block">Example block-level help text here.</p>-->
+      </div>
+      <div class="col-md-6">
+        <div class="cropArea">
+          <img-crop image="image" area-type="rectangle" result-image="loco.image" result-image-size="'max'"></img-crop>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div>Cropped Image:</div>
+        <div><img class="thumbnail crop-preview" ng-src="{{loco.image}}" /></div>
       </div>
     </form>
   </div>
 </div>
 <div class="modal-footer">
-  <button ng-repeat="button in modal.buttons" ng-class="button.classes" ng-click="button.click(newLoco)" ng-bind="button.text" class="btn"></button>
+  <button ng-repeat="button in modal.buttons" ng-class="button.classes" ng-click="button.click(loco)" ng-bind="button.text" class="btn"></button>
 </div>
 

@@ -9,6 +9,7 @@ import 'angular-socket-io';
 
 import uiRouter from 'angular-ui-router';
 import uiBootstrap from 'angular-ui-bootstrap';
+// import ngAnimate from 'angular-animate';
 // import ngMessages from 'angular-messages';
 // import ngValidationMatch from 'angular-validation-match';
 
@@ -30,15 +31,25 @@ import loco from '../components/locomotive/locomotive.service';
 import 'angular-hotkeys';
 import './app.scss';
 import modal from '../components/modal/modal.service';
-
+import 'jquery-ui-bundle/jquery-ui.min';
+import 'jquery-ui-sortable';
+import 'angular-ui-sortable';
 import 'nz-toggle/dist/nz-toggle.min';
 import 'nz-toggle/dist/nz-toggle.min.css';
 import 'angular-hotkeys/build/hotkeys.min.css';
+import 'ng-img-crop-full-extended/compile/minified/ng-img-crop.css';
+import 'jquery-ui-bundle/jquery-ui.min.css';
+import 'jquery-ui-touch-punch';
+
+import 'angular-dragdrop';
+
+
 import '../components/knobknob';
 import track from '../components/track/track.service';
+import 'ng-img-crop-full-extended/compile/minified/ng-img-crop';
 
 angular.module('dccWebappApp', [ngCookies, ngResource, ngSanitize, 'btford.socket-io', uiRouter,
-    uiBootstrap, _Auth, account, admin, navbar, footer, main, constants, socket, util, loco, 'cfp.hotkeys', 'nzToggle', track, modal
+    uiBootstrap, _Auth, account, admin, navbar, footer, main, constants, socket, util, loco, 'cfp.hotkeys', 'nzToggle', track, modal, 'ngImgCrop','ui.sortable', 'ngDragDrop'
   ])
   .config(routeConfig)
   .run(function($rootScope, $location, Auth) {
