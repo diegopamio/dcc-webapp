@@ -1,37 +1,55 @@
 <div class="container">
   <div class="row">
     <div class="col-md-9 col-sm-12">
-      <div class="row loco-gallery" ui-sortable="" ng-model="locos">
-        <div class="col-sm-2 col-xs-4" ng-repeat="loco in locos track by $index">
-          <div class="thumbnail" ng-click="selectLoco(loco)" ng-class="{'active': currentLoco === loco}">
-            <div class="pull-right">
-              <button type="button" class="close" ng-click="_.remove(locos,loco)" aria-hidden="true">&times;</button>
-            </div>
-            <div class="pull-left">
-              <button type="button" class="edit close" ng-click="addOrEditLoco(loco)"><i class="fa fa-pencil"></i></button>
-            </div>
-            <span class="number-circle" ng-class="{'disabled': !track.powerState.mainTrackPower, 'red': loco.getSpeed() && loco.isGoingForward() === false, 'green': loco.getSpeed() && loco.isGoingForward() === true, 'gray': loco.isStopped()}">{{$index + 1}}</span>
-            <img ng-src="{{loco.getImage()}}" alt="Locomotive {{loco.name}}" >
-            <div class="progress" >
-              <div
-                class="progress-bar"
-                ng-class="{
-                  'disabled': loco.isStopped() || !track.powerState.mainTrackPower,
+      <div class="row">
+        <div class="col-md-10 loco-gallery" ui-sortable="" ng-model="locos">
+          <div class="col-sm-3 col-xs-4" ng-repeat="loco in locos track by $index">
+            <div class="thumbnail" ng-click="selectLoco(loco)" ng-class="{'active': currentLoco === loco}">
+              <div class="pull-right">
+                <button type="button" class="close" ng-click="_.remove(locos,loco)" aria-hidden="true">&times;</button>
+              </div>
+              <div class="pull-left">
+                <button type="button" class="edit close" ng-click="addOrEditLoco(loco)"><i class="fa fa-pencil"></i></button>
+              </div>
+              <span class="number-circle" ng-class="{'disabled': !track.power.get(), 'red': loco.getSpeed() && loco.isGoingForward() === false, 'green': loco.getSpeed() && loco.isGoingForward() === true, 'gray': loco.isStopped()}">{{$index + 1}}</span>
+              <img ng-src="{{loco.getImage()}}" alt="Locomotive {{loco.name}}" >
+              <div class="progress" >
+                <div
+                  class="progress-bar"
+                  ng-class="{
+                  'disabled': loco.isStopped() || !track.power.get(),
                   'progress-bar-success': loco.isGoingForward() === true,
                   'progress-bar-danger':  loco.isGoingForward() === false}"
-                style="width: {{(loco.getSpeed() / loco.maxSpeed) * 100}}%;"
-                role="progressbar"
-                aria-valuenow="{{loco.getSpeed()}}"
-                aria-valuemin="0"
-                aria-valuemax="loco.maxSpeed"
-                style="min-width: 1em;">
+                  style="width: {{(loco.getSpeed() / loco.maxSpeed) * 100}}%;"
+                  role="progressbar"
+                  aria-valuenow="{{loco.getSpeed()}}"
+                  aria-valuemin="0"
+                  aria-valuemax="loco.maxSpeed"
+                  style="min-width: 1em;">
+                </div>
               </div>
             </div>
           </div>
+          <div class="col-sm-3 col-xs-4">
+            <div class="thumbnail" ng-click="addOrEditLoco()">
+              <button class="btn btn-success"><i class="fa fa-plus"></i></button>
+            </div>
+          </div>
         </div>
-        <div class="col-sm-2 col-xs-4">
-          <div class="thumbnail" ng-click="addOrEditLoco()">
-            <button class="btn btn-success"><i class="fa fa-plus"></i></button>
+        <div class="col-md-2">
+          <div id="liveclock" class="outer_face">
+
+            <div class="marker oneseven"></div>
+            <div class="marker twoeight"></div>
+            <div class="marker fourten"></div>
+            <div class="marker fiveeleven"></div>
+
+            <div class="inner_face">
+              <div class="hand hour"></div>
+              <div class="hand minute"></div>
+              <div class="hand second"></div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -67,8 +85,8 @@
     <div class="col-md-3 throttle thumbnail">
       <div class="pull-right">
       </div>
-      <div class="current-speed h2" ng-class="{'on': track.powerState.mainTrackPower}">{{track.powerState.mainTrackPower? (currentLoco.getSpeed()): '0FF' }}</div>
-      <div class="knob-surround" ng-class="{'on': track.powerState.mainTrackPower}">
+      <div class="current-speed h2" ng-class="{'on': track.power.get()}">{{track.power.get()? (currentLoco.getSpeed()): '0FF' }}</div>
+      <div class="knob-surround" ng-class="{'on': track.power.get()}">
         <div id="control"></div>
       </div>
       <div class="direction-slider">

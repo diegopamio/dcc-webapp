@@ -2,14 +2,33 @@
 const angular = require('angular');
 
 /*@ngInject*/
-export function trackService() {
+export function trackService(locomotive) {
   var mainTrackPower = false;
+  var changeCallback = _.noop;
   return {
-    powerState: {
-      mainTrackPower: mainTrackPower
+    power: {
+      enable: function() {
+        if (mainTrackPower === false) {
+          mainTrackPower = true;
+          locomotive.stopAll();
+          changeCallback();
+        }
+      },
+      disable: function() {
+        if (mainTrackPower === true) {
+          mainTrackPower = false;
+          locomotive.stopAll();
+          changeCallback();
+        }
+      },
+      get: function() {
+        return mainTrackPower;
+      },
+      onChange: function (callback) {
+        changeCallback = callback;
+      }
     }
   };
-	// AngularJS will instantiate a singleton by calling "new" on this function
 }
 
 export default angular.module('dccWebappApp.track', [])

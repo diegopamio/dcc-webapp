@@ -2,7 +2,7 @@
 const angular = require('angular');
 
 /*@ngInject*/
-export function locomotiveService($timeout) {
+export function locomotiveService($timeout, baseStation) {
   var locomotives = [];
 
   var functions = {
@@ -93,10 +93,12 @@ export function locomotiveService($timeout) {
       onChangeSpeed = callback;
     };
 
-    var setSpeed = function (speed) {
+    var setSpeed = function (speed, preventPropagation) {
       if (speed !== locoMetadata.speed) {
         locoMetadata.speed = speed;
-        onChangeSpeed(speed);
+        if (!preventPropagation) {
+          onChangeSpeed(speed);
+        }
       }
     };
 
@@ -265,7 +267,6 @@ export function locomotiveService($timeout) {
       locomotives.push(newLocomotive(
         {
           name: 'Diesel Del Santi',
-          imgUrl: '/assets/images/loco1.png',
           maxSpeed: 55,
           type: 'diesel',
           number: 5

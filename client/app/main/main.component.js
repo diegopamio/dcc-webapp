@@ -15,11 +15,6 @@ export class MainController {
     locomotive.createDummyLocos();
     $scope.locos = locomotive.getAll();
 
-    $scope.powerUpTrack = function () {
-      locomotive.stopAll();
-      track.powerState.mainTrackPower = true;
-    };
-
     $scope.selectLoco = function (loco) {
       $scope.currentLoco = loco;
       $scope.currentLocoDirection = loco.isGoingForward();
@@ -44,7 +39,7 @@ export class MainController {
         var colorBars = bars.find('.tick');
         numBars = Math.round(colorBars.length*ratio);
         $timeout(function () {
-          $scope.currentLoco.setSpeed(Math.floor(ratio * $scope.currentLoco.maxSpeed));
+          $scope.currentLoco.setSpeed(Math.floor(ratio * $scope.currentLoco.maxSpeed), true);
         });
         // Update the dom only when the number of active bars
         // changes, instead of on every move
@@ -142,7 +137,6 @@ export class MainController {
     /*
      * Assignment of keyboard hot-keys.
      */
-
     var bindedHotKeys = hotkeys.bindTo($scope);
     _.forEach($scope.locos, function (loco, index) {
       bindedHotKeys.add({
@@ -157,7 +151,7 @@ export class MainController {
     bindedHotKeys.add({
       combo: 'P',
       description: 'Turn On Main Track Power',
-      callback: $scope.powerUpTrack
+      callback: track.power.enable
     });
 
     bindedHotKeys.add({
@@ -171,9 +165,7 @@ export class MainController {
     bindedHotKeys.add({
       combo: 'space',
       description: 'Turn Off Main Track Power',
-      callback: function () {
-        track.powerState.mainTrackPower = false;
-      }
+      callback: track.power.disable
     });
 
     bindedHotKeys.add({
@@ -286,6 +278,39 @@ export class MainController {
         }
       });
     }
+
+
+    /*
+     CLOCK
+     */
+    /***********************************************
+     * CSS3 Analog Clock- by JavaScript Kit (www.javascriptkit.com)
+     * Visit JavaScript Kit at http://www.javascriptkit.com/ for this script and 100s more
+     ***********************************************/
+
+    var $hands = $('#liveclock div.hand')
+
+    window.requestAnimationFrame = window.requestAnimationFrame
+      || window.mozRequestAnimationFrame
+      || window.webkitRequestAnimationFrame
+      || window.msRequestAnimationFrame
+      || function(f){setTimeout(f, 60)}
+
+
+    function updateclock(){
+      var curdate = new Date()
+      var hour_as_degree = ( curdate.getHours() + curdate.getMinutes()/60 ) / 12 * 360
+      var minute_as_degree = curdate.getMinutes() / 60 * 360
+      var second_as_degree = ( curdate.getSeconds() + curdate.getMilliseconds()/1000 ) /60 * 360
+      $hands.filter('.hour').css({transform: 'rotate(' + hour_as_degree + 'deg)' })
+      $hands.filter('.minute').css({transform: 'rotate(' + minute_as_degree + 'deg)' })
+      $hands.filter('.second').css({transform: 'rotate(' + second_as_degree + 'deg)' })
+      requestAnimationFrame(updateclock)
+    }
+
+    requestAnimationFrame(updateclock)
+
+
   }
 
   $onInit() {

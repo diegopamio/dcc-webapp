@@ -14,6 +14,31 @@
         <li ng-repeat="item in $ctrl.menu" ui-sref-active="active">
             <a ui-sref="{{item.state}}">{{item.title}}</a>
         </li>
+        <li class="" uib-dropdown auto-close="outsideClick" is-open="connectionMenuShouldBeOpened">
+          <a href class="dropdown-toggle" uib-dropdown-toggle aria-haspopup="true" aria-expanded="false">Connect to Base Station <span class="caret"></span></a>
+          <ul class="dropdown-menu" uib-dropdown-menu>
+            <li ng-class="{active: recentConnection.url === baseStation.getCurrentConnection().url}" ng-repeat="recentConnection in baseStation.getRecentConnections()">
+              <a ng-click="baseStation.connect(recentConnection.url);" href>
+                <i ng-show="baseStation.getCurrentConnection().url === recentConnection.url && baseStation.getCurrentConnection().status === 'connecting'" class="fa fa-spin fa-spinner"></i>
+                <i ng-show="baseStation.getCurrentConnection().url === recentConnection.url && baseStation.getCurrentConnection().status === 'error'" class="fa fa-times"></i>
+                <i ng-show="baseStation.getCurrentConnection().url === recentConnection.url && baseStation.getCurrentConnection().status === 'connected'" class="fa fa-check"></i>
+                {{recentConnection.url}}</a>
+            </li>
+            <li>
+              <a ng-show="baseStation.getRecentConnections().length === 0" href>No Recent Connections...</a>
+            </li>
+            <li role="separator" class="divider"></li>
+            <form class="navbar-form-inline" role="form">
+              <div class="col-xs-8">
+                <input class="form-control" type="text" placeholder="New Connection URL" ng-model="newConnectionUrl" />
+              </div>
+              <div class="col-xs-4">
+                <button type="submit" ng-disabled="!newConnectionUrl" class="btn btn-primary" ng-click="baseStation.connect(newConnectionUrl);newConnectionUrl = '';connectionMenuShouldBeOpened = false">Connect!</button>
+              </div>
+            </form>
+
+          </ul>
+        </li>
         <li ng-show="$ctrl.isAdmin()" ui-sref-active="active"><a ui-sref="admin">Admin</a></li>
 
       </ul>
@@ -33,7 +58,8 @@
           <nz-toggle
             width="75"
             height="35"
-            ng-model="track.powerState.mainTrackPower">
+            on-toggle="updatePower()"
+            ng-model="power">
           </nz-toggle>
         </li>
       </ul>

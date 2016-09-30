@@ -28,6 +28,7 @@ import constants from './app.constants';
 import util from '../components/util/util.module';
 import socket from '../components/socket/socket.service';
 import loco from '../components/locomotive/locomotive.service';
+import base from '../components/base-station/base-station.service';
 import 'angular-hotkeys';
 import './app.scss';
 import modal from '../components/modal/modal.service';
@@ -49,13 +50,14 @@ import track from '../components/track/track.service';
 import 'ng-img-crop-full-extended/compile/minified/ng-img-crop';
 
 angular.module('dccWebappApp', [ngCookies, ngResource, ngSanitize, 'btford.socket-io', uiRouter,
-    uiBootstrap, _Auth, account, admin, navbar, footer, main, constants, socket, util, loco, 'cfp.hotkeys', 'nzToggle', track, modal, 'ngImgCrop','ui.sortable', 'ngDragDrop'
+    uiBootstrap, _Auth, account, admin, navbar, footer, main, constants, socket, util, loco, base, 'cfp.hotkeys', 'nzToggle', track, modal, 'ngImgCrop','ui.sortable', 'ngDragDrop'
   ])
   .config(routeConfig)
   .run(function($rootScope, $location, Auth) {
     'ngInject';
     // Redirect to login if route requires auth and you're not logged in
 
+    $rootScope.status = {text: 'Not Connected to Base Station... please connect.'};
     $rootScope.$on('$stateChangeStart', function(event, next) {
       Auth.isLoggedIn(function(loggedIn) {
         if(next.authenticate && !loggedIn) {

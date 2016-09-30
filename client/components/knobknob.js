@@ -10,6 +10,8 @@ import _ from 'lodash';
 
 (function($){
   var rotation = 0;
+  var startDeg = -1;
+
   $.fn.knobKnob = function(props, value){
     let max = 270;
 
@@ -20,12 +22,13 @@ import _ from 'lodash';
           case 'update':
             var knob = el.find('.knob');
             var knobTop = knob.find('.top');
-            knobTop.css('transition','all ' + (Math.abs(rotation - value) * 1000) + 'ms ease-in');
+            knobTop.css('transition','all 100ms ease-in');
             knobTop.css('transform','rotate('+(value * max)+'deg)');
+            startDeg = -1;
+            rotation = value * max;
             setTimeout(function () {
               knobTop.css('transition','all 0ms');
             }, 365);
-            rotation = value;
             el.data('knobKnob').turn(value);
         }
       });
@@ -83,7 +86,7 @@ import _ from 'lodash';
       var knobTop = knob.find('.top');
       var startDeg = -1;
       var currentDeg = 0;
-      rotation = 0;
+      //rotation = 0;
       var lastDeg = 0;
       var doc = $(document);
 
@@ -108,7 +111,6 @@ import _ from 'lodash';
           rad2deg = 180/Math.PI;
 
         var drag = function(e){
-          //if (!mainTrackPower) return;
           a = center.y - e.pageY;
           b = center.x - e.pageX;
           deg = Math.atan2(a,b)*rad2deg;
